@@ -57,15 +57,17 @@ Use the higher-order function getWinners to do the following:
 4. Returns the names of all winning countries in an array called `winners` */ 
 
 function getWinners(array, getFinalsCB) {
-    let winners = getFinalsCB(array).map(function (i){
-        if(i["Home Team Goals"] > i["Away Team Goals"]){
-            return (i["Home Team Name"]);
-        } else if(i["Home Team Goals"] < i["Away Team Goals"]){
-            return (i["Away Team Name"]);
-        } else {
-            return (i["Win conditions"]);
-        }
-    })
+    let winners = getFinalsCB(array).map(i => i["Home Team Goals"] > i["Away Team Goals"] ? i["Home Team Name"] : i["Away Team Name"]);
+    
+    // let winners = getFinalsCB(array).map(function (i){
+    //     if(i["Home Team Goals"] > i["Away Team Goals"]){
+    //         return (i["Home Team Name"]);
+    //     } else if(i["Home Team Goals"] < i["Away Team Goals"]){
+    //         return (i["Away Team Name"]);
+    //     } else {
+    //         return (i["Win conditions"]);
+    //     }
+    // })
     return winners;
 }
 console.log('task 4------------------->', getWinners(fifaData, getFinals));
@@ -123,20 +125,30 @@ Create a function called `getCountryWins` that takes the parameters `data` and `
 Hint: Investigate your data to find "team initials"!
 Hint: use `.reduce` */
 
-function getCountryWins(/* code here */) {
-
-    /* code here */
-
+function getCountryWins(data, teamInitials) {
+    let teamFinals = data.filter(function(item){
+        return (item.Stage === 'Final' && (item['Home Team Initials'] === teamInitials || item['Away Team Initials'] === teamInitials))     
+    })
+    let teamWins = teamFinals.reduce(function(acc, item){
+        if(item['Home Team Initials'] === teamInitials && item['Home Team Goals'] > item['Away Team Goals']){
+            return acc + 1;
+        }else if(item['Away Team Initials'] === teamInitials && item['Away Team Goals'] > item['Home Team Goals']){
+            return acc + 1;
+        } 
+        return acc;
+            
+    },0)
+   return teamWins;
 }
 
+console.log('stretch1------------->', getCountryWins(fifaData, "FRA"));
 
 
 /* 💪💪💪💪💪 Stretch 2: 💪💪💪💪💪 
 Write a function called getGoals() that accepts a parameter `data` and returns the team with the most goals score per appearance (average goals for) in the World Cup finals */
 
-function getGoals(/* code here */) {
+function getGoals(data) {
 
-    /* code here */
 
 }
 
